@@ -570,3 +570,409 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantEdge Intelligence | Portal & Pricing Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#020617',
+                            card: '#0f172a',
+                            border: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased">
+
+    <!-- GLOBAL TOP NAVIGATION -->
+    <header class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center justify-center text-emerald-400 font-bold">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight text-white">Quant<span class="text-emerald-500">Edge</span></span>
+            </div>
+            
+            <!-- VIEW SWITCHER BUTTONS -->
+            <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 p-1 rounded-xl text-xs font-semibold">
+                <button onclick="switchMainView('pricing')" id="nav-pricing" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white transition">Public Pricing</button>
+                <button onclick="switchMainView('customer')" id="nav-customer" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">Customer Portal</button>
+                <button onclick="switchMainView('admin')" id="nav-admin" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center space-x-1">
+                    <i class="fa-solid fa-user-shield text-amber-400"></i>
+                    <span>Admin Panel</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- ================================================================= -->
+        <!-- SECTION 1: PUBLIC PRICING TABLE (UPDATED QUARTERLY PRO TIER)     -->
+        <!-- ================================================================= -->
+        <section id="view-pricing" class="block space-y-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Subscription Tiers</h2>
+                <p class="text-3xl font-bold text-white mt-1">Select Your Membership Level</p>
+                <p class="text-slate-400 text-sm mt-2">Quantitative setup recommendations with rigorous trade retrospectives.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 items-stretch">
+                <!-- MONTHLY PASS -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Monthly Pass</h3>
+                        <p class="text-slate-400 text-xs mt-1">Flexible month-to-month access</p>
+                        <div class="mt-6 mb-6">
+                            <span class="text-4xl font-extrabold text-white">$59</span>
+                            <span class="text-slate-400 text-sm">/ month</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-slate-300 border-t border-slate-800 pt-6">
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Weekly Recommendation Watchlist</span></li>
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Stocks, Forex & Commodities</span></li>
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Telegram Alert Integration</span></li>
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Monthly Track Record Access</span></li>
+                        </ul>
+                    </div>
+                    <button class="mt-8 w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-3 rounded-xl transition">Choose Monthly</button>
+                </div>
+
+                <!-- QUARTERLY PRO (UPDATED WITH POST-MORTEM / RETROSPECTIVE) -->
+                <div class="bg-slate-900 border-2 border-emerald-500 rounded-2xl p-8 flex flex-col justify-between relative shadow-2xl shadow-emerald-500/10">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-bold text-xs uppercase px-3 py-1 rounded-full">
+                        Most Popular (Save 17%)
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Quarterly Pro</h3>
+                        <p class="text-slate-400 text-xs mt-1">Billed $147 every 3 months</p>
+                        <div class="mt-6 mb-6">
+                            <span class="text-4xl font-extrabold text-white">$49</span>
+                            <span class="text-slate-400 text-sm">/ month</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-slate-300 border-t border-slate-800 pt-6">
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Everything in Monthly Pass</span></li>
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Risk Allocation Calculator Tool</span></li>
+                            <!-- REPLACED VIDEO BREAKDOWN WITH RETROSPECTIVE & EXECUTION REVIEW -->
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-check text-emerald-400 text-xs mt-1"></i>
+                                <div>
+                                    <span class="font-medium text-emerald-300">Trade Retrospective & Execution Review</span>
+                                    <p class="text-xs text-slate-400 mt-0.5">Post-mortem reflections, execution logic & personal trade lessons</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Priority Setup Clarification</span></li>
+                        </ul>
+                    </div>
+                    <button class="mt-8 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-emerald-600/20">Choose Quarterly</button>
+                </div>
+
+                <!-- ANNUAL VIP -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Annual VIP</h3>
+                        <p class="text-slate-400 text-xs mt-1">Billed $468 per year (Save 34%)</p>
+                        <div class="mt-6 mb-6">
+                            <span class="text-4xl font-extrabold text-white">$39</span>
+                            <span class="text-slate-400 text-sm">/ month</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-slate-300 border-t border-slate-800 pt-6">
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Everything in Quarterly Pro</span></li>
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Historical Trade Archive Access</span></li>
+                            <li class="flex items-center space-x-3"><i class="fa-solid fa-check text-emerald-400 text-xs"></i><span>Direct Q&A Analysis Desk</span></li>
+                        </ul>
+                    </div>
+                    <button class="mt-8 w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-3 rounded-xl transition">Choose Annual</button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================================================================= -->
+        <!-- SECTION 2: CUSTOMER ACCESS MODULE (SUBSCRIBER PORTAL)             -->
+        <!-- ================================================================= -->
+        <section id="view-customer" class="hidden space-y-8">
+            <!-- MEMBER HEADER -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-xl flex items-center justify-center font-bold text-lg">
+                        QP
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h2 class="text-xl font-bold text-white">Member Dashboard</h2>
+                            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/30 px-2.5 py-0.5 rounded-full">Quarterly Pro Member</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Accessing active trade recommendations & retrospective logs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTROLS -->
+            <div class="flex space-x-4 border-b border-slate-800 text-sm font-semibold">
+                <button onclick="switchCustomerTab('watchlist')" id="cust-tab-watchlist" class="pb-3 border-b-2 border-emerald-500 text-emerald-400">
+                    <i class="fa-solid fa-list-check mr-2"></i>Weekly Recommendations
+                </button>
+                <button onclick="switchCustomerTab('postmortem')" id="cust-tab-postmortem" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-journal-whills mr-2"></i>Trade Retrospectives (Post-Mortems)
+                </button>
+                <button onclick="switchCustomerTab('calculator')" id="cust-tab-calculator" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-calculator mr-2"></i>Risk Allocation Tool
+                </button>
+            </div>
+
+            <!-- TAB 1: WEEKLY RECOMMENDATION WATCHLIST -->
+            <div id="cust-content-watchlist" class="block space-y-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">Active Sunday Recommendations</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-950 text-slate-400 text-xs uppercase font-mono">
+                                <tr>
+                                    <th class="p-3">Asset</th>
+                                    <th class="p-3">Bias</th>
+                                    <th class="p-3">Entry Zone</th>
+                                    <th class="p-3">Stop Loss</th>
+                                    <th class="p-3">Take Profit</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 font-mono text-xs">
+                                <tr>
+                                    <td class="p-3 font-bold text-white">XAU/USD</td>
+                                    <td class="p-3 text-emerald-400 font-bold">BULLISH</td>
+                                    <td class="p-3">2380.00 - 2385.00</td>
+                                    <td class="p-3 text-rose-400">2362.00</td>
+                                    <td class="p-3 text-emerald-400">2420.00 / 2460.00</td>
+                                    <td class="p-3"><span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">Active Zone</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: TRADE RETROSPECTIVES (POST-MORTEMS) -->
+            <div id="cust-content-postmortem" class="hidden space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <span class="bg-slate-800 text-emerald-400 text-xs font-mono px-2.5 py-1 rounded">Post-Mortem #042</span>
+                            <h3 class="text-xl font-bold text-white mt-2">EUR/USD Short Position — Execution Retrospective</h3>
+                        </div>
+                        <span class="text-xs text-slate-400">Logged Aug 12, 2026</span>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-4 bg-slate-950 p-4 rounded-lg border border-slate-800 mb-6 font-mono text-xs">
+                        <div><span class="text-slate-500 block">Entry Price:</span><span class="text-white font-bold">1.0890</span></div>
+                        <div><span class="text-slate-500 block">Exit Price:</span><span class="text-white font-bold">1.0805</span></div>
+                        <div><span class="text-slate-500 block">Realized Result:</span><span class="text-emerald-400 font-bold">+2.8 R (+2.8%)</span></div>
+                    </div>
+
+                    <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                        <div>
+                            <h4 class="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-1">1. Strategy & Entry Rationale</h4>
+                            <p class="bg-slate-950/50 p-3 rounded-lg border border-slate-800/60">
+                                Price tapped into the 4-Hour liquidity sweep zone near 1.0895 during the European session open. Lower timeframe structure confirmed displacement to the downside with expanding delta.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">2. Trade Management & Personal Reflections</h4>
+                            <p class="bg-slate-950/50 p-3 rounded-lg border border-slate-800/60">
+                                Partial profits were locked at TP1 (1.0830). I adjusted the stop-loss to breakeven prematurely prior to the US CPI release, which almost whipped me out during a spike. Next time, allow full breathing room until structural market structure shifts.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: RISK CALCULATOR -->
+            <div id="cust-content-calculator" class="hidden">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-xl">
+                    <h3 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-calculator text-emerald-400 mr-2"></i>Position Sizing Calculator</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Account Equity ($)</label>
+                            <input type="number" id="calc-equity" value="10000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Risk Percentage (%)</label>
+                            <input type="number" id="calc-risk" value="1.5" step="0.1" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <button onclick="calculateRisk()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-lg transition">Calculate Max Dollar Risk</button>
+                        <div id="calc-result" class="hidden p-4 bg-slate-950 border border-emerald-500/30 rounded-lg text-center font-mono">
+                            <span class="text-xs text-slate-400 block">Recommended Max Capital Exposure:</span>
+                            <span id="calc-amount" class="text-2xl font-bold text-emerald-400">$150.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================================================================= -->
+        <!-- SECTION 3: ADMIN CONFIGURATION & CONTENT PUBLISHING PORTAL        -->
+        <!-- ================================================================= -->
+        <section id="view-admin" class="hidden space-y-8">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-amber-400"></i> Platform Owner Admin Desk
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">Configure plan features, publish setup recommendations, and post trade retrospectives.</p>
+                </div>
+            </div>
+
+            <!-- ADMIN TABS -->
+            <div class="flex space-x-4 border-b border-slate-800 text-sm font-semibold">
+                <button onclick="switchAdminTab('publish')" id="admin-tab-publish" class="pb-3 border-b-2 border-emerald-500 text-emerald-400">
+                    <i class="fa-solid fa-pen-to-square mr-2"></i>Publish Content / Retrospectives
+                </button>
+                <button onclick="switchAdminTab('tiers')" id="admin-tab-tiers" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-gear mr-2"></i>Configure Service Tiers
+                </button>
+            </div>
+
+            <!-- ADMIN TAB 1: PUBLISH CONTENT & RETROSPECTIVES -->
+            <div id="admin-content-publish" class="block space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">Create New Publication Entry</h3>
+                    <form onsubmit="handleAdminSubmit(event)" class="space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">ContentType</label>
+                                <select id="post-type" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500">
+                                    <option value="retrospective">Trade Retrospective (Post-Mortem)</option>
+                                    <option value="watchlist">Weekly Recommendation Setup</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Target Asset / Instrument</label>
+                                <input type="text" placeholder="e.g. XAU/USD or NVDA" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Target Membership Tiers</label>
+                            <div class="flex items-center space-x-6 text-sm py-2">
+                                <label class="flex items-center space-x-2"><input type="checkbox" class="accent-emerald-500"> <span>Monthly Pass</span></label>
+                                <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-emerald-500"> <span>Quarterly Pro</span></label>
+                                <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-emerald-500"> <span>Annual VIP</span></label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Trader Reflections & Execution Thoughts (Post-Mortem Notes)</label>
+                            <textarea rows="5" placeholder="Detail your entry reasoning, trade management experience, psychological observations, and key takeaways..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white focus:outline-none focus:border-emerald-500 text-sm"></textarea>
+                        </div>
+
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-2.5 rounded-lg transition">Publish to Customer Dashboard</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 2: SERVICE TIER CONFIGURATOR -->
+            <div id="admin-content-tiers" class="hidden space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">Edit Subscription Tier Offerings</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- EDIT MONTHLY -->
+                        <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-3">
+                            <h4 class="font-bold text-white border-b border-slate-800 pb-2">Monthly Pass</h4>
+                            <div><label class="text-xs text-slate-400">Price ($)</label><input type="text" value="59" class="w-full bg-slate-900 border border-slate-800 text-white text-xs p-2 rounded mt-1"></div>
+                        </div>
+
+                        <!-- EDIT QUARTERLY PRO -->
+                        <div class="bg-slate-950 p-4 rounded-lg border border-emerald-500/50 space-y-3">
+                            <h4 class="font-bold text-emerald-400 border-b border-slate-800 pb-2">Quarterly Pro</h4>
+                            <div><label class="text-xs text-slate-400">Monthly Effective Price ($)</label><input type="text" value="49" class="w-full bg-slate-900 border border-slate-800 text-white text-xs p-2 rounded mt-1"></div>
+                            <div class="space-y-2">
+                                <label class="text-xs text-slate-400">Included Features</label>
+                                <div class="text-xs space-y-1.5">
+                                    <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-emerald-500"> <span>Weekly Watchlist</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-emerald-500"> <span>Risk Calculator</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-emerald-500"> <span>Trade Retrospectives</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EDIT ANNUAL VIP -->
+                        <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-3">
+                            <h4 class="font-bold text-white border-b border-slate-800 pb-2">Annual VIP</h4>
+                            <div><label class="text-xs text-slate-400">Monthly Effective Price ($)</label><input type="text" value="39" class="w-full bg-slate-900 border border-slate-800 text-white text-xs p-2 rounded mt-1"></div>
+                        </div>
+                    </div>
+                    <button onclick="alert('Tier configurations updated successfully!')" class="mt-6 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-2.5 rounded-lg transition text-sm">Save Tier Changes</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- INTERACTIVE VIEW AND TAB SWITCHING SCRIPT -->
+    <script>
+        function switchMainView(view) {
+            document.getElementById('view-pricing').classList.add('hidden');
+            document.getElementById('view-customer').classList.add('hidden');
+            document.getElementById('view-admin').classList.add('hidden');
+
+            document.getElementById('nav-pricing').className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+            document.getElementById('nav-customer').className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+            document.getElementById('nav-admin').className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center space-x-1";
+
+            document.getElementById('view-' + view).classList.remove('hidden');
+            const activeNav = document.getElementById('nav-' + view);
+            if(view === 'admin') {
+                activeNav.className = "px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 transition flex items-center space-x-1";
+            } else {
+                activeNav.className = "px-3 py-1.5 rounded-lg bg-emerald-600 text-white transition";
+            }
+        }
+
+        function switchCustomerTab(tab) {
+            ['watchlist', 'postmortem', 'calculator'].forEach(t => {
+                document.getElementById('cust-content-' + t).classList.add('hidden');
+                document.getElementById('cust-tab-' + t).className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-white";
+            });
+            document.getElementById('cust-content-' + tab).classList.remove('hidden');
+            document.getElementById('cust-tab-' + tab).className = "pb-3 border-b-2 border-emerald-500 text-emerald-400";
+        }
+
+        function switchAdminTab(tab) {
+            ['publish', 'tiers'].forEach(t => {
+                document.getElementById('admin-content-' + t).classList.add('hidden');
+                document.getElementById('admin-tab-' + t).className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-white";
+            });
+            document.getElementById('admin-content-' + tab).classList.remove('hidden');
+            document.getElementById('admin-tab-' + tab).className = "pb-3 border-b-2 border-emerald-500 text-emerald-400";
+        }
+
+        function calculateRisk() {
+            const eq = parseFloat(document.getElementById('calc-equity').value) || 0;
+            const pct = parseFloat(document.getElementById('calc-risk').value) || 0;
+            const amt = (eq * (pct / 100)).toFixed(2);
+            document.getElementById('calc-amount').innerText = '$' + amt;
+            document.getElementById('calc-result').classList.remove('hidden');
+        }
+
+        function handleAdminSubmit(e) {
+            e.preventDefault();
+            alert('Publication posted successfully! Customers in Quarterly Pro and Annual VIP tiers can now view this update.');
+        }
+    </script>
+</body>
+</html>
