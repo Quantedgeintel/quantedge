@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantEdge Intelligence | Secure Admin Desk</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 950: '#020617' },
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-amber-500 selection:text-white min-h-screen p-4 sm:p-8">
+
+    <!-- VIEW 3: ADMIN MANAGEMENT MODULE (INPUT & PUBLISH DESK) -->
+    <div id="view-admin" class="max-w-7xl mx-auto space-y-8">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between">
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-amber-400"></i> Platform Owner Admin Desk
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">Input weekly trade setups & publish visual retrospectives with rich media.</p>
+            </div>
+            <a href="index.html" class="text-xs text-slate-400 hover:text-white bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-lg transition">
+                Return to Main Site
+            </a>
+        </div>
+
+        <!-- ADMIN TABS -->
+        <div class="flex space-x-6 border-b border-slate-800 text-sm font-semibold">
+            <button onclick="switchAdminTab('rec-input')" id="admin-tab-rec-input" class="pb-3 border-b-2 border-emerald-500 text-emerald-400 transition">
+                <i class="fa-solid fa-plus-circle mr-2"></i>1. Input Weekly Recommendation Setup
+            </button>
+            <button onclick="switchAdminTab('retro-input')" id="admin-tab-retro-input" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-image mr-2"></i>2. Publish Rich Trade Retrospective (With Photos)
+            </button>
+        </div>
+
+        <!-- ADMIN SECTION 1: WEEKLY RECOMMENDATION INPUT FORM -->
+        <div id="admin-content-rec-input" class="block space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-base font-bold text-white">Key in New Weekly Recommendation</h3>
+                        <p class="text-xs text-slate-400">Code/Symbol will be automatically categorized into Stocks, Commodities, Forex, or Indices.</p>
+                    </div>
+                    <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded border border-emerald-500/20 font-mono">Auto-Detector Ready</span>
+                </div>
+                
+                <form onsubmit="handleWeeklyRecSubmit(event)" class="space-y-4">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Asset Symbol / Ticker Code *</label>
+                            <input type="text" id="rec-symbol" placeholder="e.g. NVDA, $NECB.KL, XAU/USD, EUR/USD, US500" required onkeyup="updateSymbolPreview()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Auto-Detected Asset Category</label>
+                            <div id="rec-detected-cat" class="w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-xs text-emerald-400 font-mono font-bold flex items-center space-x-2">
+                                <i class="fa-solid fa-robot"></i> <span>Type symbol above...</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Auto-Detected Country (For Stocks)</label>
+                            <div id="rec-detected-country" class="w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-xs text-amber-400 font-mono font-bold flex items-center space-x-2">
+                                <i class="fa-solid fa-globe"></i> <span>N/A</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Bias</label>
+                            <select id="rec-bias" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                                <option value="BULLISH">BULLISH</option>
+                                <option value="BEARISH">BEARISH</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Entry Zone</label>
+                            <input type="text" id="rec-entry" placeholder="e.g. 118.50 - 120.00" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Stop Loss (SL)</label>
+                            <input type="text" id="rec-sl" placeholder="e.g. 112.00" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Take Profit (TP1 / TP2)</label>
+                            <input type="text" id="rec-tp" placeholder="e.g. 132.00 / 145.00" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Max Capital Risk (%)</label>
+                            <input type="text" id="rec-risk" placeholder="e.g. 1.5%" value="1.5%" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Chart Screenshot / Photo URL (Optional)</label>
+                            <input type="url" id="rec-image" placeholder="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Analysis & Confluence Notes</label>
+                        <textarea id="rec-notes" rows="3" placeholder="Key technical reasons, liquidity sweep levels, macro factors..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
+                    </div>
+
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition flex items-center space-x-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Save Setup (Stored to LocalStorage)</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ADMIN SECTION 2: RICH RETROSPECTIVE PUBLISHER (WITH PHOTOS) -->
+        <div id="admin-content-retro-input" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                <h3 class="text-base font-bold text-white mb-2">Publish Visual Trade Retrospective (Post-Mortem)</h3>
+                <p class="text-xs text-slate-400 mb-6">Attach trade chart photos and write formatted execution insights to make the post-mortem engaging.</p>
+
+                <form onsubmit="handleRetroSubmit(event)" class="space-y-4">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Ticker / Asset Name *</label>
+                            <input type="text" id="retro-ticker" placeholder="e.g. $NECB or XAU/USD" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Trade Return / R-Multiple *</label>
+                            <input type="text" id="retro-return" placeholder="e.g. +18.4% Exit (+3.2 R)" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Trade Outcome Tag</label>
+                            <select id="retro-tag" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                                <option value="WINNER">WINNER (Target Hit)</option>
+                                <option value="BREAKEVEN">BREAKEVEN / PARTIAL</option>
+                                <option value="STOPPED">STOP LOSS EXECUTED</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Chart Photo / Graphic URL *</label>
+                            <input type="url" id="retro-image" placeholder="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Execution Metrics (Entry / Exit / Risk)</label>
+                            <input type="text" id="retro-metrics" placeholder="e.g. Entry: 14.20 | Exit: 16.81 | Risk: 1.5%" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Interesting Execution Writing & Retrospective Analysis *</label>
+                        <textarea id="retro-writing" rows="4" placeholder="Detail trade management, psychological factors, volume expansion, key technical lessons..." required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
+                    </div>
+
+                    <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition flex items-center space-x-2">
+                        <i class="fa-solid fa-camera-retro"></i>
+                        <span>Publish Retrospective</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN JAVASCRIPT CONTROLLERS -->
+    <script>
+        function switchAdminTab(tab) {
+            ['rec-input', 'retro-input'].forEach(t => {
+                const content = document.getElementById('admin-content-' + t);
+                const button = document.getElementById('admin-tab-' + t);
+                if (content) content.classList.add('hidden');
+                if (button) button.className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-white transition";
+            });
+
+            const activeContent = document.getElementById('admin-content-' + tab);
+            const activeButton = document.getElementById('admin-tab-' + tab);
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeButton) activeButton.className = "pb-3 border-b-2 border-emerald-500 text-emerald-400 transition";
+        }
+
+        function autoDetectAsset(symbol) {
+            const clean = symbol.trim().toUpperCase();
+            if (clean.includes('/') || clean.startsWith('EUR') || clean.startsWith('GBP') || clean.startsWith('USD') || clean.startsWith('AUD')) {
+                if (!clean.includes('XAU') && !clean.includes('XAG')) return { category: 'Forex', country: 'Global' };
+            }
+            if (clean.includes('XAU') || clean.includes('GOLD') || clean.includes('XAG') || clean.includes('OIL')) {
+                return { category: 'Commodities', country: 'Global' };
+            }
+            if (clean.includes('US500') || clean.includes('SPX') || clean.includes('NAS100') || clean.includes('US30')) {
+                return { category: 'Indices', country: 'Global' };
+            }
+            let country = "United States 🇺🇸";
+            if (clean.endsWith('.KL') || clean.includes('NECB')) country = "Malaysia 🇲🇾";
+            else if (clean.endsWith('.SI')) country = "Singapore 🇸🇬";
+            return { category: 'Stocks', country: country };
+        }
+
+        function updateSymbolPreview() {
+            const sym = document.getElementById('rec-symbol').value;
+            if (!sym.trim()) {
+                document.getElementById('rec-detected-cat').innerHTML = `<i class="fa-solid fa-robot"></i> <span>Type symbol above...</span>`;
+                document.getElementById('rec-detected-country').innerHTML = `<i class="fa-solid fa-globe"></i> <span>N/A</span>`;
+                return;
+            }
+            const detected = autoDetectAsset(sym);
+            document.getElementById('rec-detected-cat').innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> <span>${detected.category}</span>`;
+            document.getElementById('rec-detected-country').innerHTML = `<i class="fa-solid fa-flag text-amber-400"></i> <span>${detected.country}</span>`;
+        }
+
+        function handleWeeklyRecSubmit(e) {
+            e.preventDefault();
+            const newItem = {
+                id: Date.now(),
+                symbol: document.getElementById('rec-symbol').value,
+                bias: document.getElementById('rec-bias').value,
+                entry: document.getElementById('rec-entry').value,
+                sl: document.getElementById('rec-sl').value,
+                tp: document.getElementById('rec-tp').value,
+                risk: document.getElementById('rec-risk').value,
+                image: document.getElementById('rec-image').value,
+                notes: document.getElementById('rec-notes').value
+            };
+            
+            let existing = JSON.parse(localStorage.getItem('quantEdgeRecs') || '[]');
+            existing.unshift(newItem);
+            localStorage.setItem('quantEdgeRecs', JSON.stringify(existing));
+            
+            e.target.reset();
+            updateSymbolPreview();
+            alert('Recommendation successfully published to portal storage!');
+        }
+
+        function handleRetroSubmit(e) {
+            e.preventDefault();
+            const newItem = {
+                id: Date.now(),
+                ticker: document.getElementById('retro-ticker').value,
+                returnTag: document.getElementById('retro-return').value,
+                outcomeTag: document.getElementById('retro-tag').value,
+                metrics: document.getElementById('retro-metrics').value,
+                image: document.getElementById('retro-image').value,
+                writing: document.getElementById('retro-writing').value
+            };
+
+            let existing = JSON.parse(localStorage.getItem('quantEdgeRetros') || '[]');
+            existing.unshift(newItem);
+            localStorage.setItem('quantEdgeRetros', JSON.stringify(existing));
+
+            e.target.reset();
+            alert('Visual retrospective successfully published!');
+        }
+    </script>
+</body>
+</html>
