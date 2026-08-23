@@ -234,25 +234,8 @@
                                 <th class="px-6 py-4">Max Drawdown</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-800 font-mono">
-                            <tr class="hover:bg-slate-800/40 transition">
-                                <td class="px-6 py-4 font-sans font-bold text-white">Jan 2026</td>
-                                <td class="px-6 py-4">18</td>
-                                <td class="px-6 py-4">61.1%</td>
-                                <td class="px-6 py-4">1 : 2.2</td>
-                                <td class="px-6 py-4 text-emerald-400 font-bold">+14.2 R</td>
-                                <td class="px-6 py-4 text-emerald-400 font-bold">+14.2%</td>
-                                <td class="px-6 py-4 text-slate-400">-3.1%</td>
-                            </tr>
-                            <tr class="hover:bg-slate-800/40 transition">
-                                <td class="px-6 py-4 font-sans font-bold text-white">Feb 2026</td>
-                                <td class="px-6 py-4">15</td>
-                                <td class="px-6 py-4">53.3%</td>
-                                <td class="px-6 py-4">1 : 2.5</td>
-                                <td class="px-6 py-4 text-emerald-400 font-bold">+10.5 R</td>
-                                <td class="px-6 py-4 text-emerald-400 font-bold">+10.5%</td>
-                                <td class="px-6 py-4 text-slate-400">-4.2%</td>
-                            </tr>
+                        <tbody id="track-record-tbody" class="divide-y divide-slate-800 font-mono">
+                            <!-- Dynamically populated from admin portal storage -->
                         </tbody>
                     </table>
                 </div>
@@ -565,12 +548,14 @@
             </div>
         </div>
 
-        <!-- TAB 5: RAW TRADE LOGS -->
+        <!-- TAB 5: RAW TRADE LOGS (FED FROM ADMIN PORTAL) -->
         <div id="cust-content-trade-logs" class="hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
                 <h3 class="text-lg font-bold text-white mb-2"><i class="fa-solid fa-file-csv text-emerald-400 mr-2"></i>Raw Historical Trade Logs</h3>
-                <p class="text-xs text-slate-400 mb-4">Downloadable workbooks containing full trade histories.</p>
-                <button onclick="alert('Downloading Trade Log CSV...')" class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs px-3.5 py-2 rounded-lg font-semibold">Download 2026 YTD Log</button>
+                <p class="text-xs text-slate-400 mb-6">Downloadable CSV workbooks containing full trade histories for the past 12 months (managed via Admin Desk).</p>
+                <div id="container-trade-logs" class="space-y-4">
+                    <!-- Dynamically populated from admin portal storage -->
+                </div>
             </div>
         </div>
     </div>
@@ -615,12 +600,102 @@
             { id: 1, date: "2026-08-10", symbol: "NVDA", entry: "119.20", exit: "132.00", outcome: "WIN", accuracy: "95%", discipline: "10/10" }
         ];
 
+        let historicalTradeLogs = [
+            { title: "2026 Full Log", url: "https://raw.githubusercontent.com/Quantedgeintel/quantedge/main/2026%20full%20log.csv", description: "Complete verified audit log including all closed positions." }
+        ];
+
+        let monthlyTrackRecords = [
+            { month: "Jan 2026", trades: "18", winRate: "61.1%", riskReward: "1 : 2.2", rMultiple: "+14.2 R", return: "+14.2%", drawdown: "-3.1%" },
+            { month: "Feb 2026", trades: "15", winRate: "53.3%", riskReward: "1 : 2.5", rMultiple: "+10.5 R", return: "+10.5%", drawdown: "-4.2%" }
+        ];
+
         window.addEventListener('load', () => {
             const storedRecs = localStorage.getItem('quantEdgeRecs');
             if (storedRecs) {
                 try { weeklyRecommendations = JSON.parse(storedRecs).concat(weeklyRecommendations); } catch(e){}
             }
+
+            const storedLogs = localStorage.getItem('quantEdgeHistoricalLogs');
+            if (storedLogs) {
+                try { historicalTradeLogs = JSON.parse(storedLogs); } catch(e){}
+            }
+            renderHistoricalTradeLogs();
+
+            // Load saved monthly track records from admin portal storage
+            const storedMonthly = localStorage.getItem('quantEdgeMonthlyRecords') || localStorage.getItem('quantEdgeTrackRecords');
+            if (storedMonthly) {
+                try {
+                    const parsedMonthly = JSON.parse(storedMonthly);
+                    if (Array.isArray(parsedMonthly) && parsedMonthly.length > 0) {
+                        monthlyTrackRecords = parsedMonthly;
+                    }
+                } catch(e){}
+            }
+            renderTrackRecords();
         });
+
+        function renderTrackRecords() {
+            const tbody = document.getElementById('track-record-tbody');
+            if (!tbody) return;
+            if (monthlyTrackRecords.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-slate-400">No monthly track records available.</td></tr>`;
+                return;
+            }
+            let html = '';
+            monthlyTrackRecords.forEach(item => {
+                const month = item.month || item.period || '-';
+                const trades = item.trades || item.tradesExecuted || '-';
+                let winRate = item.winRate || item.winrate || '-';
+                if (!winRate.toString().includes('%') && winRate !== '-') winRate += '%';
+                const riskReward = item.riskReward || item.avgRiskReward || item.r_r || '-';
+                let rMultiple = item.rMultiple || item.netRMultiple || '-';
+                if (!rMultiple.toString().includes('R') && rMultiple !== '-') rMultiple += ' R';
+                let monthlyReturn = item.return || item.monthlyReturn || '-';
+                if (!monthlyReturn.toString().includes('%') && monthlyReturn !== '-') monthlyReturn += '%';
+                if (!monthlyReturn.toString().startsWith('+') && !monthlyReturn.toString().startsWith('-') && monthlyReturn !== '-') monthlyReturn = '+' + monthlyReturn;
+                let drawdown = item.drawdown || item.maxDrawdown || '-';
+                if (!drawdown.toString().includes('%') && drawdown !== '-') drawdown += '%';
+                if (!drawdown.toString().startsWith('-') && drawdown !== '-' && !drawdown.toString().startsWith('+')) drawdown = '-' + drawdown;
+
+                html += `
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <td class="px-6 py-4 font-sans font-bold text-white">${month}</td>
+                        <td class="px-6 py-4">${trades}</td>
+                        <td class="px-6 py-4">${winRate}</td>
+                        <td class="px-6 py-4">${riskReward}</td>
+                        <td class="px-6 py-4 text-emerald-400 font-bold">${rMultiple}</td>
+                        <td class="px-6 py-4 text-emerald-400 font-bold">${monthlyReturn}</td>
+                        <td class="px-6 py-4 text-slate-400">${drawdown}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderHistoricalTradeLogs() {
+            const container = document.getElementById('container-trade-logs');
+            if (!container) return;
+            if (historicalTradeLogs.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400">No historical logs published yet.</p>`;
+                return;
+            }
+            let html = '';
+            historicalTradeLogs.forEach(log => {
+                html += `
+                    <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="text-sm font-bold text-white">${log.title}</h4>
+                            <p class="text-xs text-slate-400 mt-1">${log.description || 'Downloadable CSV log workbook.'}</p>
+                        </div>
+                        <a href="${log.url}" target="_blank" class="bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs px-4 py-2 rounded-lg font-semibold transition flex items-center space-x-2 shrink-0">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download CSV Log</span>
+                        </a>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
 
         function switchMainView(viewName) {
             document.getElementById('view-public').classList.add('hidden');
@@ -675,6 +750,7 @@
         function renderCustomerPortalData() {
             renderWatchlistTables();
             renderJournalData();
+            renderHistoricalTradeLogs();
         }
 
         function renderWatchlistTables() {
