@@ -39,21 +39,11 @@
                 <h2 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-sliders text-amber-400"></i> Platform Owner Admin Desk
                 </h2>
-                <p class="text-xs text-slate-400 mt-1">Input weekly trade setups & publish visual retrospectives with rich media.</p>
+                <p class="text-xs text-slate-400 mt-1">Input weekly trade setups, monthly track record audits, and raw historical CSV logs (up to 12 months).</p>
             </div>
             <a href="index.html" class="text-xs text-slate-400 hover:text-white bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-lg transition">
                 Return to Main Site
             </a>
-        </div>
-
-        <!-- ADMIN TABS -->
-        <div class="flex space-x-6 border-b border-slate-800 text-sm font-semibold">
-            <button onclick="switchAdminTab('rec-input')" id="admin-tab-rec-input" class="pb-3 border-b-2 border-emerald-500 text-emerald-400 transition">
-                <i class="fa-solid fa-plus-circle mr-2"></i>1. Input Weekly Recommendation Setup
-            </button>
-            <button onclick="switchAdminTab('retro-input')" id="admin-tab-retro-input" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-white transition">
-                <i class="fa-solid fa-image mr-2"></i>2. Publish Rich Trade Retrospective (With Photos)
-            </button>
         </div>
 
         <!-- ADMIN SECTION 1: WEEKLY RECOMMENDATION INPUT FORM -->
@@ -135,73 +125,147 @@
             </div>
         </div>
 
-        <!-- ADMIN SECTION 2: RICH RETROSPECTIVE PUBLISHER (WITH PHOTOS) -->
-        <div id="admin-content-retro-input" class="hidden space-y-6">
+        <!-- ADMIN SECTION 2: MONTHLY TRACK RECORD UPDATE (UP TO LAST 3 MONTHS) -->
+        <div id="admin-content-track-record" class="block space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                <h3 class="text-base font-bold text-white mb-2">Publish Visual Trade Retrospective (Post-Mortem)</h3>
-                <p class="text-xs text-slate-400 mb-6">Attach trade chart photos and write formatted execution insights to make the post-mortem engaging.</p>
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-base font-bold text-white">Update Monthly Track Record Log (Last 3 Months)</h3>
+                        <p class="text-xs text-slate-400">Manage performance metrics for recent months displayed in the public audit table.</p>
+                    </div>
+                    <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded border border-amber-500/20 font-mono">Audited Log Desk</span>
+                </div>
 
-                <form onsubmit="handleRetroSubmit(event)" class="space-y-4">
+                <form onsubmit="handleTrackRecordSubmit(event)" class="space-y-4">
                     <div class="grid md:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs text-slate-300 mb-1">Ticker / Asset Name *</label>
-                            <input type="text" id="retro-ticker" placeholder="e.g. $NECB or XAU/USD" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-300 mb-1">Trade Return / R-Multiple *</label>
-                            <input type="text" id="retro-return" placeholder="e.g. +18.4% Exit (+3.2 R)" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-300 mb-1">Trade Outcome Tag</label>
-                            <select id="retro-tag" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                                <option value="WINNER">WINNER (Target Hit)</option>
-                                <option value="BREAKEVEN">BREAKEVEN / PARTIAL</option>
-                                <option value="STOPPED">STOP LOSS EXECUTED</option>
+                            <label class="block text-xs text-slate-300 mb-1">Select Month / Period *</label>
+                            <select id="tr-month" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
+                                <option value="Jun 2026">Jun 2026</option>
+                                <option value="Jul 2026">Jul 2026</option>
+                                <option value="Aug 2026">Aug 2026</option>
                             </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Trades Executed *</label>
+                            <input type="number" id="tr-trades" placeholder="e.g. 15" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Win Rate (%) *</label>
+                            <input type="text" id="tr-winrate" placeholder="e.g. 56.5%" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
                         </div>
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid md:grid-cols-4 gap-4">
                         <div>
-                            <label class="block text-xs text-slate-300 mb-1">Chart Photo / Graphic URL *</label>
-                            <input type="url" id="retro-image" placeholder="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <label class="block text-xs text-slate-300 mb-1">Avg Risk:Reward *</label>
+                            <input type="text" id="tr-rr" placeholder="e.g. 1 : 2.4" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-300 mb-1">Execution Metrics (Entry / Exit / Risk)</label>
-                            <input type="text" id="retro-metrics" placeholder="e.g. Entry: 14.20 | Exit: 16.81 | Risk: 1.5%" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <label class="block text-xs text-slate-300 mb-1">Net R-Multiple *</label>
+                            <input type="text" id="tr-rmultiple" placeholder="e.g. +11.5 R" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Monthly Return (%) *</label>
+                            <input type="text" id="tr-return" placeholder="e.g. +11.5%" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Max Drawdown (%) *</label>
+                            <input type="text" id="tr-drawdown" placeholder="e.g. -3.8%" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition flex items-center space-x-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Save Track Record Entry</span>
+                    </button>
+                </form>
+
+                <!-- Saved Records Preview Table -->
+                <div class="mt-8 border-t border-slate-800 pt-6">
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Recently Saved Monthly Records (Last 3 Months)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300 font-mono">
+                            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+                                <tr>
+                                    <th class="p-2.5">Month</th>
+                                    <th class="p-2.5">Trades</th>
+                                    <th class="p-2.5">Win Rate</th>
+                                    <th class="p-2.5">R:R</th>
+                                    <th class="p-2.5">R-Multiple</th>
+                                    <th class="p-2.5">Return</th>
+                                    <th class="p-2.5">Drawdown</th>
+                                    <th class="p-2.5 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-tr-tbody" class="divide-y divide-slate-800">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN SECTION 3: RAW HISTORICAL TRADE LOGS UPDATE (UP TO LAST 12 MONTHS) -->
+        <div id="admin-content-historical-logs" class="block space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-base font-bold text-white">Update Raw Historical Trade Logs (Last 12 Months)</h3>
+                        <p class="text-xs text-slate-400">Manage downloadable CSV workbooks containing full trade histories for the past 12 months.</p>
+                    </div>
+                    <span class="text-xs bg-cyan-500/10 text-cyan-400 px-3 py-1 rounded border border-cyan-500/20 font-mono">CSV Archive Desk</span>
+                </div>
+
+                <form onsubmit="handleHistoricalLogSubmit(event)" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Log Title / Period *</label>
+                            <input type="text" id="hist-title" placeholder="e.g. 2026 YTD Log, Sep 2025 - Aug 2026 Full Log" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">CSV File Download URL or Data Link *</label>
+                            <input type="url" id="hist-url" placeholder="https://example.com/trades-2026.csv" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs text-slate-300 mb-1">Interesting Execution Writing & Retrospective Analysis *</label>
-                        <textarea id="retro-writing" rows="4" placeholder="Detail trade management, psychological factors, volume expansion, key technical lessons..." required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
+                        <label class="block text-xs text-slate-300 mb-1">Description / Summary of Log</label>
+                        <input type="text" id="hist-desc" placeholder="e.g. Complete verified audit log including all closed positions." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
                     </div>
 
-                    <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition flex items-center space-x-2">
-                        <i class="fa-solid fa-camera-retro"></i>
-                        <span>Publish Retrospective</span>
+                    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition flex items-center space-x-2">
+                        <i class="fa-solid fa-file-csv"></i>
+                        <span>Save Historical Log (Max 12 Months Storage)</span>
                     </button>
                 </form>
+
+                <!-- Saved Historical Logs Table Preview -->
+                <div class="mt-8 border-t border-slate-800 pt-6">
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Saved Historical Logs (Up to Last 12 Months)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300 font-mono">
+                            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+                                <tr>
+                                    <th class="p-2.5">Log Title / Period</th>
+                                    <th class="p-2.5">Download URL / Link</th>
+                                    <th class="p-2.5">Description</th>
+                                    <th class="p-2.5 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-hist-tbody" class="divide-y divide-slate-800">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- ADMIN JAVASCRIPT CONTROLLERS -->
     <script>
-        function switchAdminTab(tab) {
-            ['rec-input', 'retro-input'].forEach(t => {
-                const content = document.getElementById('admin-content-' + t);
-                const button = document.getElementById('admin-tab-' + t);
-                if (content) content.classList.add('hidden');
-                if (button) button.className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-white transition";
-            });
-
-            const activeContent = document.getElementById('admin-content-' + tab);
-            const activeButton = document.getElementById('admin-tab-' + tab);
-            if (activeContent) activeContent.classList.remove('hidden');
-            if (activeButton) activeButton.className = "pb-3 border-b-2 border-emerald-500 text-emerald-400 transition";
-        }
-
         function autoDetectAsset(symbol) {
             const clean = symbol.trim().toUpperCase();
             if (clean.includes('/') || clean.startsWith('EUR') || clean.startsWith('GBP') || clean.startsWith('USD') || clean.startsWith('AUD')) {
@@ -254,25 +318,130 @@
             alert('Recommendation successfully published to portal storage!');
         }
 
-        function handleRetroSubmit(e) {
+        // Track Record Management Functions
+        function handleTrackRecordSubmit(e) {
             e.preventDefault();
-            const newItem = {
-                id: Date.now(),
-                ticker: document.getElementById('retro-ticker').value,
-                returnTag: document.getElementById('retro-return').value,
-                outcomeTag: document.getElementById('retro-tag').value,
-                metrics: document.getElementById('retro-metrics').value,
-                image: document.getElementById('retro-image').value,
-                writing: document.getElementById('retro-writing').value
+            const record = {
+                month: document.getElementById('tr-month').value,
+                trades: document.getElementById('tr-trades').value,
+                winrate: document.getElementById('tr-winrate').value,
+                rr: document.getElementById('tr-rr').value,
+                rmultiple: document.getElementById('tr-rmultiple').value,
+                returnVal: document.getElementById('tr-return').value,
+                drawdown: document.getElementById('tr-drawdown').value
             };
 
-            let existing = JSON.parse(localStorage.getItem('quantEdgeRetros') || '[]');
-            existing.unshift(newItem);
-            localStorage.setItem('quantEdgeRetros', JSON.stringify(existing));
+            let records = JSON.parse(localStorage.getItem('quantEdgeTrackRecords') || '[]');
+            const existingIndex = records.findIndex(r => r.month === record.month);
+            if (existingIndex >= 0) {
+                records[existingIndex] = record;
+            } else {
+                records.push(record);
+            }
+            
+            // Limit stored audit records to max 3 entries
+            if (records.length > 3) {
+                records = records.slice(records.length - 3);
+            }
 
+            localStorage.setItem('quantEdgeTrackRecords', JSON.stringify(records));
             e.target.reset();
-            alert('Visual retrospective successfully published!');
+            renderAdminTrackRecords();
+            alert('Monthly track record successfully updated!');
         }
+
+        function renderAdminTrackRecords() {
+            const tbody = document.getElementById('admin-tr-tbody');
+            if (!tbody) return;
+            const records = JSON.parse(localStorage.getItem('quantEdgeTrackRecords') || '[]');
+            if (records.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-3 text-slate-500 text-center">No track records stored yet. Use the form above to add up to the last 3 months.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            records.forEach((r, idx) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800/40">
+                        <td class="p-2.5 font-bold text-white">${r.month}</td>
+                        <td class="p-2.5">${r.trades}</td>
+                        <td class="p-2.5 text-emerald-400">${r.winrate}</td>
+                        <td class="p-2.5">${r.rr}</td>
+                        <td class="p-2.5 text-emerald-400">${r.rmultiple}</td>
+                        <td class="p-2.5 text-emerald-400 font-bold">${r.returnVal}</td>
+                        <td class="p-2.5 text-slate-400">${r.drawdown}</td>
+                        <td class="p-2.5 text-right">
+                            <button onclick="deleteTrackRecord(${idx})" class="text-rose-400 hover:text-rose-300 text-xs px-2 py-1 bg-rose-500/10 rounded border border-rose-500/20">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteTrackRecord(idx) {
+            let records = JSON.parse(localStorage.getItem('quantEdgeTrackRecords') || '[]');
+            records.splice(idx, 1);
+            localStorage.setItem('quantEdgeTrackRecords', JSON.stringify(records));
+            renderAdminTrackRecords();
+        }
+
+        // Historical Trade Logs Management Functions (Up to Last 12 Months)
+        function handleHistoricalLogSubmit(e) {
+            e.preventDefault();
+            const logItem = {
+                title: document.getElementById('hist-title').value,
+                url: document.getElementById('hist-url').value,
+                desc: document.getElementById('hist-desc').value,
+                dateAdded: new Date().toLocaleDateString()
+            };
+
+            let logs = JSON.parse(localStorage.getItem('quantEdgeHistoricalLogs') || '[]');
+            logs.unshift(logItem);
+            
+            // Limit stored historical logs to max 12 entries
+            if (logs.length > 12) {
+                logs = logs.slice(0, 12);
+            }
+
+            localStorage.setItem('quantEdgeHistoricalLogs', JSON.stringify(logs));
+            e.target.reset();
+            renderAdminHistoricalLogs();
+            alert('Historical trade log successfully updated!');
+        }
+
+        function renderAdminHistoricalLogs() {
+            const tbody = document.getElementById('admin-hist-tbody');
+            if (!tbody) return;
+            const logs = JSON.parse(localStorage.getItem('quantEdgeHistoricalLogs') || '[]');
+            if (logs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-3 text-slate-500 text-center">No historical logs stored yet. Use the form above to add up to the last 12 months of logs.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            logs.forEach((l, idx) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800/40">
+                        <td class="p-2.5 font-bold text-white">${l.title}</td>
+                        <td class="p-2.5"><a href="${l.url}" target="_blank" class="text-cyan-400 hover:underline truncate max-w-xs block">${l.url}</a></td>
+                        <td class="p-2.5 text-slate-400">${l.desc || 'N/A'}</td>
+                        <td class="p-2.5 text-right">
+                            <button onclick="deleteHistoricalLog(${idx})" class="text-rose-400 hover:text-rose-300 text-xs px-2 py-1 bg-rose-500/10 rounded border border-rose-500/20">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteHistoricalLog(idx) {
+            let logs = JSON.parse(localStorage.getItem('quantEdgeHistoricalLogs') || '[]');
+            logs.splice(idx, 1);
+            localStorage.setItem('quantEdgeHistoricalLogs', JSON.stringify(logs));
+            renderAdminHistoricalLogs();
+        }
+
+        window.addEventListener('load', () => {
+            renderAdminTrackRecords();
+            renderAdminHistoricalLogs();
+        });
     </script>
 </body>
 </html>
