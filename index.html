@@ -29,6 +29,8 @@
     </script>
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN Client -->[cite: 5]
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>[cite: 5]
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white min-h-screen">
 
@@ -588,6 +590,10 @@
 
     <!-- JAVASCRIPT CONTROLLERS -->
     <script>
+        // Initialize Supabase Client[cite: 5]
+        const SUPABASE_URL = 'https://cwczsamnawznmvdtoojr.supabase.co';[cite: 6]
+        const SUPABASE_ANON_KEY = 'sb_publishable_8GtR38rBdif8egfWHDK8iw_vnStoI6z';[cite: 5]
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);[cite: 5]
         let isAuthenticated = false;
 
         let weeklyRecommendations = [
@@ -610,6 +616,13 @@
         ];
 
         window.addEventListener('load', async () => {
+            // Check if user has an active session already[cite: 5]
+            const { data: { session } } = await supabase.auth.getSession();[cite: 5]
+            if (session) {[cite: 5]
+                isAuthenticated = true;[cite: 5]
+                document.getElementById('portal-user-email').innerText = session.user.email;[cite: 5]
+            }[cite: 5]
+
             const storedRecs = localStorage.getItem('quantEdgeRecs');
             if (storedRecs) {
                 try { weeklyRecommendations = JSON.parse(storedRecs).concat(weeklyRecommendations); } catch(e){}
@@ -750,12 +763,28 @@
             document.getElementById('loginModal').classList.toggle('hidden');
         }
 
-        function handleCustomerLogin(e) {
-            e.preventDefault();
-            isAuthenticated = true;
-            toggleLoginModal();
-            switchMainView('customer');
-            renderCustomerPortalData();
+        async function handleCustomerLogin(e) {[cite: 5]
+            e.preventDefault();[cite: 5]
+            const email = document.getElementById('login-email').value;[cite: 5]
+            const password = e.target.querySelector('input[type="password"]').value;[cite: 5]
+
+            // Call Supabase Authentication[cite: 5]
+            const { data, error } = await supabase.auth.signInWithPassword({[cite: 5]
+                email: email,[cite: 5]
+                password: password,[cite: 5]
+            });[cite: 5]
+
+            if (error) {[cite: 5]
+                alert('Login Failed: ' + error.message);[cite: 5]
+                return;[cite: 5]
+            }[cite: 5]
+
+            // Success[cite: 5]
+            isAuthenticated = true;[cite: 5]
+            document.getElementById('portal-user-email').innerText = email;[cite: 5]
+            toggleLoginModal();[cite: 5]
+            switchMainView('customer');[cite: 5]
+            renderCustomerPortalData();[cite: 5]
         }
 
         function switchCustomerTab(tab) {
