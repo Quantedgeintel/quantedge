@@ -4,31 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuantEdge Intelligence | Data-Driven Market Analytics & Portal (260823R13)</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        slate: { 950: '#020617' },
-                        brand: {
-                            50: '#f0fdf4',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            900: '#14532d',
-                            dark: '#0f172a',
-                            card: '#1e293b',
-                            border: '#334155'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    
+    <!-- Compiled Tailwind CSS (Output from Tailwind CLI) -->
+    <link rel="stylesheet" href="./dist/output.css">
+
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Supabase JavaScript v2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -237,7 +219,7 @@
                             </tr>
                         </thead>
                         <tbody id="track-record-tbody" class="divide-y divide-slate-800 font-mono">
-                            <!-- Dynamically populated from GitHub CSV or storage -->
+                            <!-- Dynamically populated -->
                         </tbody>
                     </table>
                 </div>
@@ -550,14 +532,12 @@
             </div>
         </div>
 
-        <!-- TAB 5: RAW TRADE LOGS (FED FROM ADMIN PORTAL) -->
+        <!-- TAB 5: RAW TRADE LOGS -->
         <div id="cust-content-trade-logs" class="hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
                 <h3 class="text-lg font-bold text-white mb-2"><i class="fa-solid fa-file-csv text-emerald-400 mr-2"></i>Raw Historical Trade Logs</h3>
                 <p class="text-xs text-slate-400 mb-6">Downloadable CSV workbooks containing full trade histories for the past 12 months (managed via Admin Desk).</p>
-                <div id="container-trade-logs" class="space-y-4">
-                    <!-- Dynamically populated from admin portal storage -->
-                </div>
+                <div id="container-trade-logs" class="space-y-4"></div>
             </div>
         </div>
     </div>
@@ -590,7 +570,6 @@
 
     <!-- JAVASCRIPT CONTROLLERS -->
     <script>
-        // Initialize Supabase Client
         const SUPABASE_URL = 'https://cwczsamnawznmvdtoojr.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8GtR38rBdif8egfWHDK8iw_vnStoI6z';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -628,7 +607,6 @@
             }
             renderHistoricalTradeLogs();
 
-            // Option 2: Pulling directly from GitHub CSV file (monthly_records.csv) automatically on load
             try {
                 const response = await fetch('https://raw.githubusercontent.com/Quantedgeintel/quantedge/main/monthly_records.csv');
                 if (response.ok) {
@@ -642,27 +620,21 @@
                             if (!line) continue;
                             const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
                             let obj = {};
-                            headers.forEach((h, idx) => {
-                                obj[h] = cols[idx] || '';
-                            });
+                            headers.forEach((h, idx) => { obj[h] = cols[idx] || ''; });
                             githubRecords.push(obj);
                         }
-                        if (githubRecords.length > 0) {
-                            monthlyTrackRecords = githubRecords;
-                        }
+                        if (githubRecords.length > 0) monthlyTrackRecords = githubRecords;
                     }
                 } else {
                     throw new Error('Network response was not ok');
                 }
             } catch (err) {
-                console.warn('Could not fetch monthly_records.csv from GitHub, falling back to local storage cache.', err);
+                console.warn('Could not fetch monthly_records.csv from GitHub, falling back to cache.', err);
                 const storedMonthly = localStorage.getItem('quantEdgeMonthlyRecords') || localStorage.getItem('quantEdgeTrackRecords');
                 if (storedMonthly) {
                     try {
                         const parsedMonthly = JSON.parse(storedMonthly);
-                        if (Array.isArray(parsedMonthly) && parsedMonthly.length > 0) {
-                            monthlyTrackRecords = parsedMonthly;
-                        }
+                        if (Array.isArray(parsedMonthly) && parsedMonthly.length > 0) monthlyTrackRecords = parsedMonthly;
                     } catch(e){}
                 }
             }
@@ -723,7 +695,7 @@
                             <h4 class="text-sm font-bold text-white">${log.title}</h4>
                             <p class="text-xs text-slate-400 mt-1">${log.description || 'Downloadable CSV log workbook.'}</p>
                         </div>
-                        <a href="${log.url}" target="_blank" class="bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs px-4 py-2 rounded-lg font-semibold transition flex items-center space-x-2 shrink-0">
+                        <a href="${log.url}" target="_blank" class="bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-xs px-4 py-2 rounded-lg font-semibold transition flex items-center space-x-2 shrink-0">
                             <i class="fa-solid fa-download"></i>
                             <span>Download CSV Log</span>
                         </a>
@@ -829,7 +801,7 @@
                         <span>${item.symbol}</span>
                         ${item.image ? `<a href="${item.image}" target="_blank" class="text-emerald-400"><i class="fa-solid fa-image"></i></a>` : ''}
                     </td>
-                    <td class="p-3.5"><span class="${isBull ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'} px-2 py-0.5 rounded text-[10px] font-bold border">${item.bias}</span></td>
+                    <td class="p-3.5"><span class="${isBull ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/15 text-rose-400 border-rose-500/20'} px-2 py-0.5 rounded text-[10px] font-bold border">${item.bias}</span></td>
                     <td class="p-3.5">${item.entry}</td>
                     <td class="p-3.5 text-rose-400">${item.sl}</td>
                     <td class="p-3.5 text-emerald-400">${item.tp}</td>
@@ -856,7 +828,7 @@
                         <td class="p-3 text-slate-400">${j.date}</td>
                         <td class="p-3 font-bold text-white">${j.symbol}</td>
                         <td class="p-3">${j.entry} ➔ ${j.exit}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 rounded font-bold border ${j.outcome === 'WIN' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'}">${j.outcome}</span></td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded font-bold border ${j.outcome === 'WIN' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/15 text-rose-400 border-rose-500/20'}">${j.outcome}</span></td>
                         <td class="p-3 text-emerald-400 font-bold">${j.accuracy}</td>
                         <td class="p-3 text-amber-300">${j.discipline}</td>
                     </tr>
