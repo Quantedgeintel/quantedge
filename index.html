@@ -593,7 +593,7 @@
         // Initialize Supabase Client
         const SUPABASE_URL = 'https://cwczsamnawznmvdtoojr.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8GtR38rBdif8egfWHDK8iw_vnStoI6z';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let isAuthenticated = false;
 
