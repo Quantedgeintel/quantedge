@@ -29,7 +29,7 @@
     </script>
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase CDN Client -->
+    <!-- Supabase JavaScript v2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white min-h-screen">
@@ -328,7 +328,7 @@
         </div>
 
         <!-- TAB CONTROLS -->
-        <div class="flex flex-wrap gap-2 border-b border-slate-800 text-xs sm:text-sm font-semibold pb-1 font-sans" id="customer-tab-buttons">
+        <div class="flex flex-wrap gap-2 border-b border-slate-800 text-xs sm:text-sm font-semibold pb-1" id="customer-tab-buttons font-sans">
             <button onclick="switchCustomerTab('watchlist')" id="cust-tab-watchlist" class="pb-3 border-b-2 border-emerald-500 text-emerald-400 transition flex items-center gap-1.5">
                 <i class="fa-solid fa-list-check"></i>
                 <span>Weekly Watchlist</span>
@@ -550,7 +550,7 @@
             </div>
         </div>
 
-        <!-- TAB 5: RAW TRADE LOGS -->
+        <!-- TAB 5: RAW TRADE LOGS (FED FROM ADMIN PORTAL) -->
         <div id="cust-content-trade-logs" class="hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
                 <h3 class="text-lg font-bold text-white mb-2"><i class="fa-solid fa-file-csv text-emerald-400 mr-2"></i>Raw Historical Trade Logs</h3>
@@ -563,7 +563,7 @@
     </div>
 
     <!-- LOGIN MODAL -->
-    <div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/85 backdrop-blur-md p-4">
+    <div id="loginModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl">
             <button onclick="toggleLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
                 <i class="fa-solid fa-xmark"></i>
@@ -581,7 +581,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Password</label>
-                    <input type="password" id="login-password" value="password123" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white">
+                    <input type="password" value="password123" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white">
                 </div>
                 <button type="submit" class="w-full bg-emerald-600 text-white font-semibold py-2.5 rounded-lg text-xs">Sign In</button>
             </form>
@@ -591,9 +591,10 @@
     <!-- JAVASCRIPT CONTROLLERS -->
     <script>
         // Initialize Supabase Client
-        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL'; // Replace with your live project URL
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your live anon key
-        const supabase = (SUPABASE_URL.includes('YOUR_SUPABASE')) ? null : window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_URL = 'https://cwczsamnawznmvdtoojr.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_8GtR38rBdif8egfWHDK8iw_vnStoI6z';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         let isAuthenticated = false;
 
         let weeklyRecommendations = [
@@ -616,18 +617,6 @@
         ];
 
         window.addEventListener('load', async () => {
-            if (supabase) {
-                try {
-                    const { data: { session } } = await supabase.auth.getSession();
-                    if (session) {
-                        isAuthenticated = true;
-                        document.getElementById('portal-user-email').innerText = session.user.email;
-                    }
-                } catch(e) {
-                    console.warn('Supabase session check skipped/failed.', e);
-                }
-            }
-
             const storedRecs = localStorage.getItem('quantEdgeRecs');
             if (storedRecs) {
                 try { weeklyRecommendations = JSON.parse(storedRecs).concat(weeklyRecommendations); } catch(e){}
@@ -639,6 +628,7 @@
             }
             renderHistoricalTradeLogs();
 
+            // Option 2: Pulling directly from GitHub CSV file (monthly_records.csv) automatically on load
             try {
                 const response = await fetch('https://raw.githubusercontent.com/Quantedgeintel/quantedge/main/monthly_records.csv');
                 if (response.ok) {
@@ -763,44 +753,12 @@
         }
 
         function toggleLoginModal() {
-            const modal = document.getElementById('loginModal');
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            } else {
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
-            }
+            document.getElementById('loginModal').classList.toggle('hidden');
         }
 
-        async function handleCustomerLogin(e) {
+        function handleCustomerLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
-            // Fallback for development if placeholder keys are still present
-            if (!supabase) {
-                isAuthenticated = true;
-                document.getElementById('portal-user-email').innerText = email;
-                toggleLoginModal();
-                switchMainView('customer');
-                renderCustomerPortalData();
-                return;
-            }
-
-            // Call Supabase Authentication
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
-
-            if (error) {
-                alert('Login Failed: ' + error.message);
-                return;
-            }
-
             isAuthenticated = true;
-            document.getElementById('portal-user-email').innerText = email;
             toggleLoginModal();
             switchMainView('customer');
             renderCustomerPortalData();
